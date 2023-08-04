@@ -23,12 +23,13 @@ fn main() {
 	db.close() or { panic(err) }
 
 	mut app := &App{}
-	app.serve_static('/favicon.ico', 'src/assets/favicon.ico')
+	app.serve_static('/favicon.ico', 'src/templates/favicon.png')
+	app.serve_static('/favicon.png', 'src/templates/favicon.png')
 	// makes all static files available.
 	os.chdir(os.dir(os.executable()))!
 
 	app.handle_static('_app', true)
-	app.mount_static_folder_at(os.resource_abs_path('./templates'), '/')
+	app.mount_static_folder_at(os.resource_abs_path('./src/templates'), '/')
 	info('Running app on http://${conf.host_ip}:${conf.port}')
 	vweb.run_at(app, vweb.RunParams{ host: conf.host_ip, port: conf.port, family: .ip }) or {
 		panic(err)
